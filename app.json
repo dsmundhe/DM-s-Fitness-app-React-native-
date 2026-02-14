@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "DM's Fitness Tracker",
+    "slug": "dms-fitness-tracker",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#101820"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.dms.fitnesstracker",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#101820"
+      }
+    },
+    "extra": {
+      "apiUrl": "https://dm-fitness-app-backend.vercel.app/api",
+      "eas": {
+        "projectId": "26f0a3c7-7d04-4392-9da6-c7d3c89bd55d"
+      }
+    },
+    "plugins": [
+      "@react-native-community/datetimepicker"
+    ],
+    "owner": "dsmundhe28"
+  }
+}

@@ -66,6 +66,8 @@ export const scheduleDailyAttendanceReminder = async ({ storage, title, body, ho
     return null;
   }
 
+  await configureNotifications();
+
   const enabled = await ensurePermissionsAsync();
   if (!enabled) {
     return null;
@@ -73,7 +75,12 @@ export const scheduleDailyAttendanceReminder = async ({ storage, title, body, ho
 
   const existingId = await storage.getItem(REMINDER_ID_KEY);
   if (existingId) {
-    return existingId;
+    try {
+      await notifications.cancelScheduledNotificationAsync(existingId);
+    } catch (error) {
+      // ignore cancellation errors
+    }
+    await storage.removeItem(REMINDER_ID_KEY);
   }
 
   const id = await notifications.scheduleNotificationAsync({

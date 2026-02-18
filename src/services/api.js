@@ -5,7 +5,7 @@ import { Platform } from 'react-native';
 const resolvedApiUrl =
   process.env.EXPO_PUBLIC_API_URL ||
   Constants.expoConfig?.extra?.apiUrl ||
-  'http://localhost:4000/api';
+  'https://dm-fitness-app-backend.vercel.app/api';
 
 const apiUrl =
   Platform.OS === 'android' && resolvedApiUrl.includes('localhost')

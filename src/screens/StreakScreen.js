@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import AppGradient from '../components/AppGradient';
 import AuthContext from '../context/AuthContext';
 import api from '../services/api';
 import SectionCard from '../components/SectionCard';
@@ -118,7 +119,7 @@ const StreakScreen = () => {
   }, [streak]);
 
   return (
-    <LinearGradient colors={['#070d1a', '#0a1220', '#020617']} style={styles.container}>
+    <AppGradient style={styles.container}>
       <ScreenLoader visible={loading} message="Loading streak..." />
       <ScrollView contentContainerStyle={styles.content}>
         <AnimatedSection value={heroAnim}>
@@ -170,7 +171,7 @@ const StreakScreen = () => {
           </SectionCard>
         </AnimatedSection>
       </ScrollView>
-    </LinearGradient>
+    </AppGradient>
   );
 };
 

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Modal, Platform, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import AppGradient from '../components/AppGradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AuthContext from '../context/AuthContext';
@@ -147,7 +148,7 @@ const ProfileScreen = () => {
   };
 
   return (
-    <LinearGradient colors={['#070d1a', '#0a1220', '#020617']} style={styles.container}>
+    <AppGradient style={styles.container}>
       <ScreenLoader visible={loading} message="Saving profile..." />
       <ScrollView contentContainerStyle={styles.content}>
         <AnimatedSection value={heroAnim}>
@@ -358,7 +359,7 @@ const ProfileScreen = () => {
           </View>
         </View>
       </Modal>
-    </LinearGradient>
+    </AppGradient>
   );
 };
 

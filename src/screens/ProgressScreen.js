@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Dimensions, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { BarChart, LineChart } from 'react-native-chart-kit';
 import { LinearGradient } from 'expo-linear-gradient';
+import AppGradient from '../components/AppGradient';
 import AuthContext from '../context/AuthContext';
 import api from '../services/api';
 import EmptyState from '../components/EmptyState';
@@ -11,7 +12,7 @@ import { useToast } from '../context/ToastContext';
 import { addDays, toDateString } from '../utils/date';
 import { readCache, writeCache } from '../services/cache';
 
-const screenWidth = Dimensions.get('window').width - 48;
+const getChartWidth = () => Math.max(280, Dimensions.get('window').width - 48);
 const TRENDS_TTL_MS = 2 * 60 * 1000;
 
 const chartConfig = {
@@ -54,10 +55,12 @@ const ProgressScreen = () => {
   const [trend, setTrend] = useState({ labels: [], series: { running: [], pushups: [], strength: [] } });
   const [loading, setLoading] = useState(true);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [chartWidth, setChartWidth] = useState(getChartWidth());
 
   const heroAnim = useRef(new Animated.Value(0)).current;
   const statAnim = useRef(new Animated.Value(0)).current;
   const summaryAnim = useRef(new Animated.Value(0)).current;
+  const chartHeight = 220;
 
   const loadTrends = async (force = false) => {
     try {
@@ -99,6 +102,15 @@ const ProgressScreen = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', () => {
+      setChartWidth(getChartWidth());
+    });
+    return () => {
+      subscription?.remove?.();
+    };
+  }, []);
+
   const runningData = useMemo(() => trend.series.running || [], [trend.series.running]);
   const pushupsData = useMemo(() => trend.series.pushups || [], [trend.series.pushups]);
   const strengthData = useMemo(() => trend.series.strength || [], [trend.series.strength]);
@@ -135,13 +147,15 @@ const ProgressScreen = () => {
   }, [runningTotal, pushupsTotal]);
 
   return (
-    <LinearGradient colors={['#070d1a', '#0a1220', '#020617']} style={styles.container}>
+    <AppGradient style={styles.container}>
       <ScreenLoader visible={loading} message="Loading trends..." />
       <ScrollView contentContainerStyle={styles.content}>
         <AnimatedBlock value={heroAnim}>
           <LinearGradient colors={['#111a2c', '#0b1322']} style={styles.hero}>
-            <Text style={styles.heroTitle}>Progress Analytics</Text>
-            <Text style={styles.heroSubtitle}>Last 7 days performance and trend quality.</Text>
+            <View>
+              <Text style={styles.heroTitle}>Progress Analytics</Text>
+              <Text style={styles.heroSubtitle}>Last 7 days performance and trend quality.</Text>
+            </View>
             <TouchableOpacity style={styles.detailsButton} onPress={() => setDetailsOpen(true)}>
               <Text style={styles.detailsText}>Open chart details</Text>
             </TouchableOpacity>
@@ -195,8 +209,8 @@ const ProgressScreen = () => {
                 {trend.labels.length && hasRunningData ? (
                   <LineChart
                     data={{ labels: trend.labels, datasets: [{ data: runningData.length ? runningData : [0] }] }}
-                    width={screenWidth}
-                    height={230}
+                    width={chartWidth}
+                    height={chartHeight}
                     chartConfig={chartConfig}
                     bezier
                     withDots={false}
@@ -216,8 +230,8 @@ const ProgressScreen = () => {
                 {trend.labels.length && hasPushupsData ? (
                   <BarChart
                     data={{ labels: trend.labels, datasets: [{ data: pushupsData.length ? pushupsData : [0] }] }}
-                    width={screenWidth}
-                    height={230}
+                    width={chartWidth}
+                    height={chartHeight}
                     chartConfig={chartConfig}
                     withHorizontalLabels={false}
                     withVerticalLabels={false}
@@ -235,8 +249,8 @@ const ProgressScreen = () => {
                 {trend.labels.length && hasStrengthData ? (
                   <LineChart
                     data={{ labels: trend.labels, datasets: [{ data: strengthData.length ? strengthData : [0] }] }}
-                    width={screenWidth}
-                    height={230}
+                    width={chartWidth}
+                    height={chartHeight}
                     chartConfig={chartConfig}
                     bezier
                     withDots={false}
@@ -264,8 +278,8 @@ const ProgressScreen = () => {
                       ],
                       legend: ['Running', 'Push-ups', 'Strength']
                     }}
-                    width={screenWidth}
-                    height={250}
+                    width={chartWidth}
+                    height={Math.max(240, chartHeight + 20)}
                     chartConfig={chartConfig}
                     bezier
                     withDots={false}
@@ -285,13 +299,13 @@ const ProgressScreen = () => {
           </View>
         </View>
       </Modal>
-    </LinearGradient>
+    </AppGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  content: { padding: 20, paddingTop: 60, paddingBottom: 30 },
+  content: { paddingHorizontal: 18, paddingTop: 56, paddingBottom: 30 },
   hero: {
     borderRadius: 22,
     padding: 18,

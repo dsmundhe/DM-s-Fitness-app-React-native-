@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import AppGradient from '../components/AppGradient';
 import AuthContext from '../context/AuthContext';
 import InputField from '../components/InputField';
 import PrimaryButton from '../components/PrimaryButton';
@@ -36,7 +36,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient colors={['#0f172a', '#020617']} style={styles.container}>
+    <AppGradient style={styles.container}>
       <ScreenLoader visible={loading} message="Signing in..." />
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Welcome Back</Text>
@@ -51,7 +51,7 @@ const LoginScreen = ({ navigation }) => {
           <Text style={styles.linkText}>New here? Create an account</Text>
         </TouchableOpacity>
       </ScrollView>
-    </LinearGradient>
+    </AppGradient>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import AppGradient from '../components/AppGradient';
 import AuthContext from '../context/AuthContext';
 import api from '../services/api';
 import SectionCard from '../components/SectionCard';
@@ -158,7 +158,7 @@ const AttendanceScreen = () => {
   });
 
   return (
-    <LinearGradient colors={['#070d1a', '#0a1220', '#020617']} style={styles.container}>
+    <AppGradient style={styles.container}>
       <ScreenLoader visible={loadingEntry} message="Loading attendance..." />
       <ScrollView contentContainerStyle={styles.content}>
         <Animated.View
@@ -177,8 +177,15 @@ const AttendanceScreen = () => {
             }
           ]}
         >
-          <Text style={styles.heroTitle}>Attendance</Text>
-          <Text style={styles.heroDate}>{today}</Text>
+          <View style={styles.heroTop}>
+            <View>
+              <Text style={styles.heroTitle}>Attendance</Text>
+              <Text style={styles.heroDate}>{today}</Text>
+            </View>
+            <View style={styles.heroBadge}>
+              <Text style={styles.heroBadgeText}>Daily Log</Text>
+            </View>
+          </View>
           <Text style={styles.heroSub}>Track your daily output and keep your consistency streak alive.</Text>
           <PrimaryButton label="Log Attendance" onPress={() => setFormOpen(true)} />
         </Animated.View>
@@ -192,25 +199,27 @@ const AttendanceScreen = () => {
         </SectionCard>
 
         <SectionCard title="Body Group Distribution">
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Biceps</Text>
-            <Text style={styles.rowValue}>{form.biceps}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Thighs</Text>
-            <Text style={styles.rowValue}>{form.thighs}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Shoulders</Text>
-            <Text style={styles.rowValue}>{form.shoulders}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Six-pack</Text>
-            <Text style={styles.rowValue}>{form.sixpack}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Chest</Text>
-            <Text style={styles.rowValue}>{form.chest}</Text>
+          <View style={styles.listCard}>
+            <View style={styles.row}>
+              <Text style={styles.rowLabel}>Biceps</Text>
+              <Text style={styles.rowValue}>{form.biceps}</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.rowLabel}>Thighs</Text>
+              <Text style={styles.rowValue}>{form.thighs}</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.rowLabel}>Shoulders</Text>
+              <Text style={styles.rowValue}>{form.shoulders}</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.rowLabel}>Six-pack</Text>
+              <Text style={styles.rowValue}>{form.sixpack}</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.rowLabel}>Chest</Text>
+              <Text style={styles.rowValue}>{form.chest}</Text>
+            </View>
           </View>
         </SectionCard>
 
@@ -236,19 +245,28 @@ const AttendanceScreen = () => {
             ]}
           >
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Log Today Attendance</Text>
-              <TouchableOpacity onPress={() => setFormOpen(false)}>
+              <View>
+                <Text style={styles.modalTitle}>Log Today Attendance</Text>
+                <Text style={styles.modalSubtitle}>{today}</Text>
+              </View>
+              <TouchableOpacity onPress={() => setFormOpen(false)} style={styles.modalCloseButton}>
                 <Text style={styles.modalClose}>Close</Text>
               </TouchableOpacity>
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
-              <InputField label="Running (km)" value={form.runningKm} onChangeText={(value) => handleChange('runningKm', value)} keyboardType="numeric" />
-              <InputField label="Push-ups (reps)" value={form.pushups} onChangeText={(value) => handleChange('pushups', value)} keyboardType="numeric" />
-              <InputField label="Biceps (reps)" value={form.biceps} onChangeText={(value) => handleChange('biceps', value)} keyboardType="numeric" />
-              <InputField label="Thighs (reps)" value={form.thighs} onChangeText={(value) => handleChange('thighs', value)} keyboardType="numeric" />
-              <InputField label="Shoulders (reps)" value={form.shoulders} onChangeText={(value) => handleChange('shoulders', value)} keyboardType="numeric" />
-              <InputField label="Six-pack (reps)" value={form.sixpack} onChangeText={(value) => handleChange('sixpack', value)} keyboardType="numeric" />
-              <InputField label="Chest (reps)" value={form.chest} onChangeText={(value) => handleChange('chest', value)} keyboardType="numeric" />
+              <View style={styles.modalSection}>
+                <Text style={styles.modalSectionTitle}>Cardio & Core</Text>
+                <InputField label="Running (km)" value={form.runningKm} onChangeText={(value) => handleChange('runningKm', value)} keyboardType="numeric" />
+                <InputField label="Push-ups (reps)" value={form.pushups} onChangeText={(value) => handleChange('pushups', value)} keyboardType="numeric" />
+                <InputField label="Six-pack (reps)" value={form.sixpack} onChangeText={(value) => handleChange('sixpack', value)} keyboardType="numeric" />
+              </View>
+              <View style={styles.modalSection}>
+                <Text style={styles.modalSectionTitle}>Strength</Text>
+                <InputField label="Biceps (reps)" value={form.biceps} onChangeText={(value) => handleChange('biceps', value)} keyboardType="numeric" />
+                <InputField label="Thighs (reps)" value={form.thighs} onChangeText={(value) => handleChange('thighs', value)} keyboardType="numeric" />
+                <InputField label="Shoulders (reps)" value={form.shoulders} onChangeText={(value) => handleChange('shoulders', value)} keyboardType="numeric" />
+                <InputField label="Chest (reps)" value={form.chest} onChangeText={(value) => handleChange('chest', value)} keyboardType="numeric" />
+              </View>
               <PrimaryButton label={loading ? 'Saving...' : 'Save Attendance'} onPress={handleSubmit} disabled={loading} />
               <View style={styles.modalSpacer} />
             </ScrollView>
@@ -257,13 +275,13 @@ const AttendanceScreen = () => {
       </Modal>
 
       <ScreenLoader visible={loading} message="Saving attendance..." />
-    </LinearGradient>
+    </AppGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  content: { padding: 20, paddingTop: 60, paddingBottom: 30 },
+  content: { padding: 20, paddingTop: 56, paddingBottom: 30 },
   hero: {
     backgroundColor: '#0b1322',
     borderRadius: 20,
@@ -277,6 +295,20 @@ const styles = StyleSheet.create({
     shadowRadius: 14,
     elevation: 8
   },
+  heroTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  heroBadge: {
+    backgroundColor: '#0a1323',
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: '#24324a'
+  },
+  heroBadgeText: { color: '#f97316', fontSize: 12, fontWeight: '700' },
   heroTitle: { color: '#f8fafc', fontSize: 24, fontWeight: '700' },
   heroDate: { color: '#f97316', marginTop: 4, marginBottom: 8, fontWeight: '600' },
   heroSub: { color: '#b7c6dd', marginBottom: 14 },
@@ -287,15 +319,22 @@ const styles = StyleSheet.create({
   },
   metricTile: {
     flex: 1,
-    backgroundColor: '#0d1729',
+    backgroundColor: '#0c1426',
     borderWidth: 1,
-    borderColor: '#22334f',
-    borderRadius: 14,
+    borderColor: '#1e2a41',
+    borderRadius: 16,
     padding: 12
   },
   metricLabel: { color: '#93a4be', fontSize: 12 },
   metricValue: { color: '#f8fafc', fontWeight: '700', fontSize: 20, marginTop: 4 },
   metricUnit: { color: '#93a4be', fontSize: 12, fontWeight: '500' },
+  listCard: {
+    backgroundColor: '#0c1426',
+    borderWidth: 1,
+    borderColor: '#1e2a41',
+    borderRadius: 16,
+    padding: 12
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -327,7 +366,25 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   modalTitle: { color: '#f8fafc', fontSize: 18, fontWeight: '700' },
+  modalSubtitle: { color: '#93a4be', marginTop: 4 },
+  modalCloseButton: {
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: '#26344d',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: '#0a1323'
+  },
   modalClose: { color: '#f97316', fontWeight: '600' },
+  modalSection: {
+    backgroundColor: '#0c1426',
+    borderWidth: 1,
+    borderColor: '#1e2a41',
+    borderRadius: 16,
+    padding: 12,
+    marginBottom: 12
+  },
+  modalSectionTitle: { color: '#a5b4fc', fontWeight: '700', marginBottom: 8 },
   modalSpacer: { height: 10 }
 });
 

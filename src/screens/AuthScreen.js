@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Animated, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import AppGradient from '../components/AppGradient';
 import AuthContext from '../context/AuthContext';
 import InputField from '../components/InputField';
 import PrimaryButton from '../components/PrimaryButton';
@@ -93,7 +93,7 @@ const AuthScreen = () => {
   });
 
   return (
-    <LinearGradient colors={['#070d1a', '#0a1220', '#020617']} style={styles.container}>
+    <AppGradient style={styles.container}>
       <View style={styles.bgOrbA} />
       <View style={styles.bgOrbB} />
       <ScreenLoader visible={loading} message={mode === 'login' ? 'Signing in...' : 'Creating account...'} />
@@ -160,7 +160,7 @@ const AuthScreen = () => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </LinearGradient>
+    </AppGradient>
   );
 };
 
